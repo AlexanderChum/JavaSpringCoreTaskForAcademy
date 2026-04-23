@@ -1,4 +1,4 @@
 package practice.controller;
 
-public class Controller {
+public class ExceptionHandler {
 }
