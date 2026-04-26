@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import practice.model.OrderStatus;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -19,13 +20,19 @@ import java.util.List;
 public class OrderResponse {
 
     @JsonView(InfoScopes.Internal.class)
-    Integer id;
+    Integer orderId;
 
     @JsonView(InfoScopes.Internal.class)
-    Integer userId;
+    Integer customerId;
 
     @JsonView(InfoScopes.Internal.class)
-    List<String> products;
+    List<ProductResponse> products;
+
+    @JsonView(InfoScopes.Internal.class)
+    LocalDateTime orderDate;
+
+    @JsonView(InfoScopes.Internal.class)
+    String address;
 
     @JsonView(InfoScopes.Internal.class)
     Integer orderSum;

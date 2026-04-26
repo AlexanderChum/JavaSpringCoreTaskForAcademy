@@ -1,6 +1,6 @@
 package practice.model.dto;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import practice.model.OrderStatus;
 
 import java.util.List;
 
@@ -19,17 +18,13 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderRequest {
+    @NotNull(message = "id покупателя не может быть пустым")
+    @Positive(message = "id покупателя не может быть меньше 1")
+    Integer customerId;
 
-    @NotNull(message = "Не может отсутствовать")
-    @Positive(message = "id пользователя должен быть положительным")
-    Integer userId;
+    @NotNull(message = "Список товаров не может быть пустым")
+    List<Integer> productIds;
 
-    @NotEmpty(message = "Список продуктов не может быть пустым")
-    List<String> products;
-
-    @NotNull(message = "Сумма заказа обязательна")
-    @Positive(message = "Сумма заказа должна быть положительной")
-    Integer orderSum;
-
-    OrderStatus orderStatus;
+    @NotBlank(message = "Адрес доставки не может быть пустым")
+    String shippingAddress;
 }

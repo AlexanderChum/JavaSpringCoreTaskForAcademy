@@ -7,26 +7,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import practice.model.Order;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
+public class CustomerResponse {
 
     @JsonView(InfoScopes.Internal.class)
-    Integer id;
+    Integer customerId;
 
     @JsonView(InfoScopes.Public.class)
-    String name;
+    String firstName;
+
+    @JsonView(InfoScopes.Public.class)
+    String lastName;
 
     @JsonView(InfoScopes.Public.class)
     String email;
 
     @JsonView(InfoScopes.Internal.class)
-    List<Order> orders;
+    String contactNumber;
 }

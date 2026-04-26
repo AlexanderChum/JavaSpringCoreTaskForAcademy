@@ -12,25 +12,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
-
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    UUID id;
+    UUID productId;
 
     String name;
 
-    String email;
+    String description;
 
-    List<Order> orders;
+    Double price;
+
+    Integer quantityInStock;
 }

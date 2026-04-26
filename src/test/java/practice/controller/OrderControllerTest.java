@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import practice.model.OrderStatus;
 import practice.model.dto.OrderRequest;
 import practice.model.dto.OrderResponse;
+import practice.model.dto.ProductResponse;
 
 import java.util.List;
 
@@ -36,9 +37,9 @@ class OrderControllerTest {
     OrderController.OrderService service;
 
     final OrderResponse sample = OrderResponse.builder()
-            .id(100)
-            .userId(1)
-            .products(List.of("A", "B"))
+            .orderId(100)
+            .customerId(1)
+            .products(List.of(new ProductResponse(), new ProductResponse()))
             .orderSum(1500)
             .orderStatus(OrderStatus.NEW)
             .build();
@@ -49,10 +50,10 @@ class OrderControllerTest {
         mvc.perform(post("/createOrder")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(
-                                new OrderRequest(1, List.of("X"), 100, OrderStatus.NEW))))
+                                new OrderRequest(1, List.of(1, 2, 3), "улица Пушкина"))))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(100))
-                .andExpect(jsonPath("$.userId").value(1))
+                .andExpect(jsonPath("$.orderId").value(100))
+                .andExpect(jsonPath("$.customerId").value(1))
                 .andExpect(jsonPath("$.products").isArray());
     }
 
@@ -61,8 +62,8 @@ class OrderControllerTest {
         when(service.getOrderById(100)).thenReturn(sample);
         mvc.perform(get("/100"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.userId").exists())
+                .andExpect(jsonPath("$.orderId").exists())
+                .andExpect(jsonPath("$.customerId").exists())
                 .andExpect(jsonPath("$.orderStatus").value("NEW"));
     }
 
@@ -71,16 +72,16 @@ class OrderControllerTest {
         when(service.getOrdersByUserId(1)).thenReturn(List.of(sample));
         mvc.perform(get("/user/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").exists())
+                .andExpect(jsonPath("$[0].orderId").exists())
                 .andExpect(jsonPath("$[0].orderSum").exists());
     }
 
     @Test
     void createOrderInvalidUserIdShouldReturnBadRequest() throws Exception {
         OrderRequest invalid = OrderRequest.builder()
-                .userId(-1)
-                .products(List.of("X"))
-                .orderSum(100)
+                .customerId(-1)
+                .productIds(List.of(1 , 2 , 3))
+                .shippingAddress("улица Пушкина")
                 .build();
         mvc.perform(post("/createOrder")
                         .contentType(MediaType.APPLICATION_JSON)

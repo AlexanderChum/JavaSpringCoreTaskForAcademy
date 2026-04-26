@@ -43,17 +43,17 @@ public class OrderController {
                 .body(service.createOrder(request));
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/user/{customerId}")
     @JsonView(InfoScopes.Internal.class)
-    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable(name = "userId")
+    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable(name = "customerId")
                                                                  @NotNull(message = "id должен быть указан")
                                                                  @Positive(message = "id пользователя должен быть > 0")
-                                                                 Integer userId) {
+                                                                 Integer customerId) {
         log.info("Получен запрос на получение заказов пользователя");
         service.doServiceJob();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.getOrdersByUserId(userId));
+                .body(service.getOrdersByUserId(customerId));
     }
 
     @GetMapping("/{orderId}")
@@ -69,7 +69,7 @@ public class OrderController {
                 .body(service.getOrderById(orderId));
     }
 
-    @DeleteMapping("/{orderId}")
+    @DeleteMapping("/order/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable(name = "orderId")
                             @NotNull(message = "id должен быть указан")

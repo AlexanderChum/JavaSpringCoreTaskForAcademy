@@ -9,33 +9,29 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder(toBuilder = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Order {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    UUID orderId;
+    UUID customerId;
 
-    Customer customer;
+    String firstName;
 
-    List<Product> products;
+    String lastName;
 
-    LocalDateTime orderDate;
+    String email;
 
-    String shippingAddress;
-
-    Double totalPrice;
-
-    OrderStatus orderStatus;
+    String contactNumber;
 }

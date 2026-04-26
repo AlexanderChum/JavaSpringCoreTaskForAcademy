@@ -9,18 +9,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserRequest {
+public class CustomerRequest {
 
-    @NotBlank(message = "Имя пользователя не может быть пустым")
-    String name;
+    @NotBlank(message = "Имя не может быть пустым")
+    String firstName;
 
-    @NotBlank(message = "Почта пользователя не может быть пустым")
-    @Email(message = "Email имеет неправильный формат")
+    @NotBlank(message = "Фамилия не может быть пустой")
+    String lastName;
+
+    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Неверный формат email")
     String email;
+
+    String contactNumber;
 }

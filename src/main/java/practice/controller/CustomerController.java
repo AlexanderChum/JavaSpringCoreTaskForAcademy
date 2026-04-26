@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import practice.model.dto.InfoScopes;
-import practice.model.dto.UserRequest;
-import practice.model.dto.UserResponse;
+import practice.model.dto.CustomerRequest;
+import practice.model.dto.CustomerResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +30,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class UserController {
+public class CustomerController {
     UserService service;
 
-    @GetMapping("/users")
+    @GetMapping("/customers")
     @JsonView(InfoScopes.Public.class)
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
+    public ResponseEntity<List<CustomerResponse>> getAllUsers() {
         log.info("Получен запрос в контроллер на получение всех пользователей");
         service.doServiceJob();   //Здесь и далее действует как заглушка для имитации действий сервиса
         return ResponseEntity
@@ -43,12 +43,12 @@ public class UserController {
                 .body(service.getAllUsers());
     }
 
-    @GetMapping("/user/{UUID}")
+    @GetMapping("/customer/{UUID}")
     @JsonView(InfoScopes.Internal.class)
-    public ResponseEntity<UserResponse> getUser(@PathVariable(name = "UUID")
-                                                @NotNull(message = "id должен быть указан")
-                                                @Positive(message = "id пользователя не может быть меньше 1")
-                                                Integer id) { //Integer как заглушка UUID
+    public ResponseEntity<CustomerResponse> getUser(@PathVariable(name = "UUID")
+                                                    @NotNull(message = "id должен быть указан")
+                                                    @Positive(message = "id пользователя не может быть меньше 1")
+                                                    Integer id) { //Integer как заглушка UUID
         log.info("Получен запрос на получение пользователя");
         service.doServiceJob();
         return ResponseEntity
@@ -56,9 +56,9 @@ public class UserController {
                 .body(service.getUser(id));
     }
 
-    @PostMapping("/createUser")
+    @PostMapping("/createCustomer")
     @JsonView(InfoScopes.Internal.class)
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest request) {
+    public ResponseEntity<CustomerResponse> createUser(@RequestBody @Valid CustomerRequest request) {
         log.info("Получен запрос на создание пользователя");
         service.doServiceJob();
         return ResponseEntity
@@ -66,7 +66,7 @@ public class UserController {
                 .body(service.createUser(request));
     }
 
-    @DeleteMapping("/{UUID}")
+    @DeleteMapping("/customer/{UUID}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(name = "UUID")
                            @NotNull(message = "id должен быть указан")
@@ -76,14 +76,14 @@ public class UserController {
         service.doServiceJob();
     }
 
-    @PutMapping("/updateUser/{UUID}")
+    @PutMapping("/updateCustomer/{UUID}")
     @JsonView(InfoScopes.Internal.class)
-    public ResponseEntity<UserResponse> updateUser(@PathVariable(name = "UUID")
-                                                   @NotNull(message = "id должен быть указан")
-                                                   @Positive(message = "id пользователя не может быть меньше 1")
-                                                   Integer id,
+    public ResponseEntity<CustomerResponse> updateUser(@PathVariable(name = "UUID")
+                                                       @NotNull(message = "id должен быть указан")
+                                                       @Positive(message = "id пользователя не может быть меньше 1")
+                                                       Integer id,
 
-                                                   @RequestBody @Valid UserRequest request) {
+                                                       @RequestBody @Valid CustomerRequest request) {
         log.info("Получен запрос на обновление пользователя");
         service.doServiceJob();
         return ResponseEntity
@@ -100,22 +100,22 @@ public class UserController {
             System.out.println("Сервис выполнил свою работу");
         }
 
-        List<UserResponse> getAllUsers() {
+        List<CustomerResponse> getAllUsers() {
             return new ArrayList<>();
         }
 
-        UserResponse getUser(Integer id) {
-            return new UserResponse();
+        CustomerResponse getUser(Integer id) {
+            return new CustomerResponse();
         }
 
-        UserResponse createUser(UserRequest request) {
+        CustomerResponse createUser(CustomerRequest request) {
             //создали пользователя, вернули ответ
-            return new UserResponse();
+            return new CustomerResponse();
         }
 
-        UserResponse updateUser(Integer id, UserRequest request) {
+        CustomerResponse updateUser(Integer id, CustomerRequest request) {
             //получили пользователя из бд по id, поменяли ему поля, вернули
-            return new UserResponse();
+            return new CustomerResponse();
         }
     }
 }
