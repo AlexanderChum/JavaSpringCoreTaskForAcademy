@@ -11,8 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import practice.model.dto.CustomerRequest;
 import practice.model.dto.CustomerResponse;
+import practice.service.CustomerService;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -26,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class CustomerControllerTest {
 
+    final UUID CUSTOMER_ID = UUID.fromString("123e4567-e89b-12d3-a456-123456789012");
+
     @Autowired
     MockMvc mvc;
 
@@ -33,19 +37,22 @@ class CustomerControllerTest {
     ObjectMapper mapper;
 
     @MockBean
-    CustomerController.UserService service;
+    CustomerService service;
 
     final CustomerResponse internal = CustomerResponse.builder()
-            .customerId(1)
+            .customerId(CUSTOMER_ID)
             .firstName("Иван")
             .lastName("Иванов")
             .email("ivan@itk.com")
             .contactNumber("88005553535")
             .build();
+
     final CustomerResponse publicView = CustomerResponse.builder()
+            .customerId(CUSTOMER_ID)
             .firstName("Иван")
             .lastName("Иванов")
             .email("ivan@itk.com")
+            .contactNumber(null)
             .build();
 
     @Test
@@ -53,40 +60,52 @@ class CustomerControllerTest {
         when(service.getAllUsers()).thenReturn(List.of(publicView));
         mvc.perform(get("/customers"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").doesNotExist())
-                .andExpect(jsonPath("$[0].orders").doesNotExist())
-                .andExpect(jsonPath("$[0].firstName").value("Иван"));
+                .andExpect(jsonPath("$[0].customerId").doesNotExist())
+                .andExpect(jsonPath("$[0].firstName").value("Иван"))
+                .andExpect(jsonPath("$[0].contactNumber").doesNotExist());
     }
 
     @Test
     void getUser() throws Exception {
-        when(service.getUser(1)).thenReturn(internal);
-        mvc.perform(get("/customer/1"))
+        when(service.getUser(CUSTOMER_ID)).thenReturn(internal);
+        mvc.perform(get("/customer/{id}", CUSTOMER_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customerId").exists())
-                .andExpect(jsonPath("$.contactNumber").exists());
+                .andExpect(jsonPath("$.customerId").value(CUSTOMER_ID.toString()))
+                .andExpect(jsonPath("$.contactNumber").value("88005553535"));
     }
 
     @Test
     void createUser() throws Exception {
         when(service.createUser(any())).thenReturn(internal);
+        CustomerRequest request = CustomerRequest.builder()
+                .firstName("Иван")
+                .lastName("Иванов")
+                .email("ivan@itk.com")
+                .contactNumber("88005553535")
+                .build();
+
         mvc.perform(post("/createCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new CustomerRequest("Иван", "Иванов",
-                                "ivan@itk.com", "88005553535"))))
+                        .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.customerId").value(1));
+                .andExpect(jsonPath("$.customerId").value(CUSTOMER_ID.toString()));
     }
 
     @Test
     void updateUser() throws Exception {
         when(service.updateUser(any(), any())).thenReturn(internal);
-        mvc.perform(put("/updateCustomer/1")
+        CustomerRequest request = CustomerRequest.builder()
+                .firstName("Иван")
+                .lastName("Иванов")
+                .email("ivan@itk.com")
+                .contactNumber("88005553535")
+                .build();
+
+        mvc.perform(put("/updateCustomer/{id}", CUSTOMER_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(new CustomerRequest("Иван", "Иванов",
-                                "ivan@itk.com", "88005553535"))))
+                        .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.contactNumber").exists());
+                .andExpect(jsonPath("$.contactNumber").value("88005553535"));
     }
 
     @Test
@@ -96,6 +115,7 @@ class CustomerControllerTest {
                 .lastName("Test2")
                 .email("bad")
                 .build();
+
         mvc.perform(post("/createCustomer")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(invalid)))

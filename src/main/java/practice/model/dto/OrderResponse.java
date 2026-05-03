@@ -11,6 +11,7 @@ import practice.model.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -20,10 +21,10 @@ import java.util.List;
 public class OrderResponse {
 
     @JsonView(InfoScopes.Internal.class)
-    Integer orderId;
+    UUID orderId;
 
     @JsonView(InfoScopes.Internal.class)
-    Integer customerId;
+    UUID customerId;
 
     @JsonView(InfoScopes.Internal.class)
     List<ProductResponse> products;
@@ -35,7 +36,7 @@ public class OrderResponse {
     String address;
 
     @JsonView(InfoScopes.Internal.class)
-    Integer orderSum;
+    Double orderSum;
 
     @JsonView(InfoScopes.Internal.class)
     OrderStatus orderStatus;

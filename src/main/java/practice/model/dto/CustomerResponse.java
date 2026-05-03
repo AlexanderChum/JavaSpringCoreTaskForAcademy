@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class CustomerResponse {
 
     @JsonView(InfoScopes.Internal.class)
-    Integer customerId;
+    UUID customerId;
 
     @JsonView(InfoScopes.Public.class)
     String firstName;
