@@ -1,0 +1,55 @@
+package practice.controller;
+
+import jakarta.validation.ValidationException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import practice.model.exceptions.ApiError;
+import practice.model.exceptions.ConflictException;
+import practice.model.exceptions.NotFoundException;
+
+import java.time.LocalDateTime;
+
+@RestControllerAdvice
+@Slf4j
+public class ErrorHandler {
+
+    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError validationExceptionHandle(Exception e) {
+        log.error("Ошибка валидации: ", e);
+        return ApiError.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .reason("Ошибка валидации")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError notFoundExceptionHandler(Exception e) {
+        log.error("Ошибка NotFound: ", e);
+        return ApiError.builder()
+                .status(HttpStatus.NOT_FOUND)
+                .reason("Запрашиваемый ресурс не найден")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError conflictExceptionHandler(Exception e) {
+        log.error("Конфликт в приложении: ", e);
+        return ApiError.builder()
+                .status(HttpStatus.CONFLICT)
+                .reason("Конфликт данных")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+}
