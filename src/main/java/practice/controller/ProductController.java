@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +23,6 @@ import practice.model.dto.ProductRequest;
 import practice.model.dto.ProductResponse;
 import practice.service.ProductService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -33,11 +34,11 @@ public class ProductController {
     ProductService service;
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+    public ResponseEntity<Page<ProductResponse>> getAllProducts(Pageable pageable) {
         log.info("Получен запрос на получение всех продуктов");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.getAllProducts());
+                .body(service.getAllProducts(pageable));
     }
 
     @GetMapping("/{productId}")

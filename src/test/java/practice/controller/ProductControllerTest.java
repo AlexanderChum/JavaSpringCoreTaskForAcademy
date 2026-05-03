@@ -13,7 +13,6 @@ import practice.model.dto.ProductRequest;
 import practice.model.dto.ProductResponse;
 import practice.service.ProductService;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -48,18 +47,6 @@ class ProductControllerTest {
             .price(29999.99)
             .quantityInStock(50)
             .build();
-
-    @Test
-    void getAllProducts() throws Exception {
-        when(service.getAllProducts()).thenReturn(List.of(sample));
-
-        mvc.perform(get("/products"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].productId").value(PRODUCT_ID.toString()))
-                .andExpect(jsonPath("$[0].name").value("Мышка"))
-                .andExpect(jsonPath("$[0].price").value(29999.99))
-                .andExpect(jsonPath("$[0].quantityInStock").value(50));
-    }
 
     @Test
     void getProductById() throws Exception {

@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mapper.ProductMapper;
@@ -14,9 +16,7 @@ import practice.model.exceptions.NotFoundException;
 import practice.repository.ProductRepository;
 import practice.service.ProductService;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,11 +28,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductResponse> getAllProducts() {
+    public Page<ProductResponse> getAllProducts(Pageable pageable) {
         log.info("Получен запрос на получение всех продуктов");
-        return productRepository.findAll().stream()
-                .map(productMapper::toResponse)
-                .collect(Collectors.toList());
+        return productRepository.findAll(pageable)
+                .map(productMapper::toResponse);
     }
 
     @Override

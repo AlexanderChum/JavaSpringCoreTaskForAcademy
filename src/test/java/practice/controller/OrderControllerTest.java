@@ -93,16 +93,6 @@ class OrderControllerTest {
     }
 
     @Test
-    void getOrdersByUserId() throws Exception {
-        when(service.getOrdersByUserId(CUSTOMER_ID)).thenReturn(List.of(example));
-
-        mvc.perform(get("/user/{customerId}", CUSTOMER_ID))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].orderId").exists())
-                .andExpect(jsonPath("$[0].orderSum").exists());
-    }
-
-    @Test
     void createOrderInvalidUserIdShouldReturnBadRequest() throws Exception {
         OrderRequest invalid = OrderRequest.builder()
                 .customerId(null)

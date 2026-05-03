@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +24,6 @@ import practice.model.dto.OrderRequest;
 import practice.model.dto.OrderResponse;
 import practice.service.OrderService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -43,13 +44,15 @@ public class OrderController {
 
     @GetMapping("/user/{customerId}")
     @JsonView(InfoScopes.Internal.class)
-    public ResponseEntity<List<OrderResponse>> getOrdersByUserId(@PathVariable(name = "customerId")
+    public ResponseEntity<Page<OrderResponse>> getOrdersByUserId(@PathVariable(name = "customerId")
                                                                  @NotNull(message = "id должен быть указан")
-                                                                 UUID customerId) {
+                                                                 UUID customerId,
+
+                                                                 Pageable pageable) {
         log.info("Получен запрос на получение заказов пользователя");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.getOrdersByUserId(customerId));
+                .body(service.getOrdersByUserId(customerId, pageable));
     }
 
     @GetMapping("/{orderId}")

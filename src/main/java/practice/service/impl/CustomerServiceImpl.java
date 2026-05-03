@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mapper.CustomerMapper;
@@ -14,9 +16,7 @@ import practice.model.exceptions.NotFoundException;
 import practice.repository.CustomerRepository;
 import practice.service.CustomerService;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,11 +28,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CustomerResponse> getAllUsers() {
+    public Page<CustomerResponse> getAllUsers(Pageable pageable) {
         log.info("Получен запрос на получение пользователей");
-        return customerRepository.findAll().stream()
-                .map(customerMapper::toResponse)
-                .collect(Collectors.toList());
+        return customerRepository.findAll(pageable)
+                .map(customerMapper::toResponse);
     }
 
     @Override

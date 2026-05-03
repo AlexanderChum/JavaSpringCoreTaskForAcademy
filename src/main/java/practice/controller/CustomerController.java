@@ -7,6 +7,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +24,6 @@ import practice.model.dto.CustomerRequest;
 import practice.model.dto.CustomerResponse;
 import practice.service.CustomerService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,11 +35,11 @@ public class CustomerController {
 
     @GetMapping("/customers")
     @JsonView(InfoScopes.Public.class)
-    public ResponseEntity<List<CustomerResponse>> getAllUsers() {
+    public ResponseEntity<Page<CustomerResponse>> getAllUsers(Pageable pageable) {
         log.info("Получен запрос в контроллер на получение всех пользователей");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(service.getAllUsers());
+                .body(service.getAllUsers(pageable));
     }
 
     @GetMapping("/customer/{UUID}")

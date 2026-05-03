@@ -1,13 +1,14 @@
 package practice.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import practice.model.dto.CustomerRequest;
 import practice.model.dto.CustomerResponse;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface CustomerService {
-    List<CustomerResponse> getAllUsers();
+    Page<CustomerResponse> getAllUsers(Pageable pageable);
 
     CustomerResponse getUser(UUID id);
 

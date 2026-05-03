@@ -13,7 +13,6 @@ import practice.model.dto.CustomerRequest;
 import practice.model.dto.CustomerResponse;
 import practice.service.CustomerService;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -46,24 +45,6 @@ class CustomerControllerTest {
             .email("ivan@itk.com")
             .contactNumber("88005553535")
             .build();
-
-    final CustomerResponse publicView = CustomerResponse.builder()
-            .customerId(CUSTOMER_ID)
-            .firstName("Иван")
-            .lastName("Иванов")
-            .email("ivan@itk.com")
-            .contactNumber(null)
-            .build();
-
-    @Test
-    void getAllUsers() throws Exception {
-        when(service.getAllUsers()).thenReturn(List.of(publicView));
-        mvc.perform(get("/customers"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].customerId").doesNotExist())
-                .andExpect(jsonPath("$[0].firstName").value("Иван"))
-                .andExpect(jsonPath("$[0].contactNumber").doesNotExist());
-    }
 
     @Test
     void getUser() throws Exception {

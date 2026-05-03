@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.mapper.OrderMapper;
@@ -22,7 +24,6 @@ import practice.service.OrderService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -61,10 +62,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrderResponse> getOrdersByUserId(UUID customerId) {
-        return orderRepository.findByCustomerId(customerId).stream()
-                .map(orderMapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<OrderResponse> getOrdersByUserId(UUID customerId, Pageable pageable) {
+        return orderRepository.findByCustomerId(customerId, pageable)
+                .map(orderMapper::toResponse);
     }
 
     @Override
