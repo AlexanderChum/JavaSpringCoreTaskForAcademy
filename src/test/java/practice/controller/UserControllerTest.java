@@ -47,11 +47,6 @@ class UserControllerTest {
             .orders(List.of())
             .build();
 
-    final UserResponse publicView = UserResponse.builder()
-            .name("Иван")
-            .email("ivan@itk.com")
-            .build();
-
     @Test
     void getUser() throws Exception {
         when(userService.getUser(userId)).thenReturn(internal);
