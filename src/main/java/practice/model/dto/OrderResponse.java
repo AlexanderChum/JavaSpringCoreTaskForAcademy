@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import practice.model.OrderStatus;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -19,10 +20,10 @@ import java.util.List;
 public class OrderResponse {
 
     @JsonView(InfoScopes.Internal.class)
-    Integer id;
+    UUID id;
 
     @JsonView(InfoScopes.Internal.class)
-    Integer userId;
+    UUID userId;
 
     @JsonView(InfoScopes.Internal.class)
     List<String> products;

@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS users (
+    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    user_id UUID NOT NULL,
+    order_sum INT NOT NULL,
+    order_status VARCHAR(20) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS order_products (
+    order_id UUID NOT NULL,
+    products VARCHAR(255) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);

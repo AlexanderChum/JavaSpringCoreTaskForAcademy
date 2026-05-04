@@ -6,14 +6,15 @@ import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import practice.model.OrderStatus;
 
 import java.util.List;
+import java.util.UUID;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,8 +22,7 @@ import java.util.List;
 public class OrderRequest {
 
     @NotNull(message = "Не может отсутствовать")
-    @Positive(message = "id пользователя должен быть положительным")
-    Integer userId;
+    UUID userId;
 
     @NotEmpty(message = "Список продуктов не может быть пустым")
     List<String> products;

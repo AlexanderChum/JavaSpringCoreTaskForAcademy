@@ -4,22 +4,22 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import practice.model.Order;
 
 import java.util.List;
+import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
 
     @JsonView(InfoScopes.Internal.class)
-    Integer id;
+    UUID id;
 
     @JsonView(InfoScopes.Public.class)
     String name;
@@ -28,5 +28,5 @@ public class UserResponse {
     String email;
 
     @JsonView(InfoScopes.Internal.class)
-    List<Order> orders;
+    List<OrderResponse> orders;
 }
